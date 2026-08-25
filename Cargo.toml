@@ -1,0 +1,82 @@
+cargo-features = ["profile-rustflags"]
+
+[package]
+name = "ai-resolver"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+rand = { version = "*", default-features = false, features = ["small_rng"] }
+ahash = { version = "0.8.7", default-features = false, optional = true }
+static_assertions = "1.1.0"
+serde-json-core = "0.6.0"
+serde = { version = "1.0", default-features = false, features = ["derive"] }
+serde-big-array = "0.5.0"
+paste = "1.0.14"
+# features = ["bytemuck", "serde-serialize-no-std"]
+nalgebra = { version = "0.33.2", default-features = false , features = ["libm"] }
+num-traits = { version = "0.2", default-features = false, features = ["libm"] }
+hashbrown = "0.14.3"
+spin = "0.9.8"
+derive_more = { version = "1.0.0", default-features = false, features = ["full"] }
+portable-atomic = { version = "1.7.0", default-features = false }
+stb_truetype_rust = { path = "../stb_truetype_rust_nostd/stb_truetype_rust" }
+obfstr = { version = "*", path = "../obfstr/" }
+box-crypt = { version = "*", path = "../box-crypt/" }
+fmtools = { version = "*", git = "https://github.com/SesameOne-Software/fmtools.git" }
+winapi = { version = "0.3", features = [
+  "dwmapi",
+  "impl-default",
+  "wingdi",
+  "sysinfoapi",
+  "processenv",
+  "processthreadsapi",
+  "consoleapi",
+  "debugapi",
+  "d3d11",
+  "d3dcompiler",
+  "libloaderapi",
+  "heapapi",
+  "windef",
+  "winuser",
+  "memoryapi",
+  "psapi",
+  "synchapi",
+] }
+ntapi = "0.4.0"
+
+# Reduce binary size
+[profile.release]
+features = ["release"]
+opt-level = 3
+# opt-level = 3
+codegen-units = 1
+debug-assertions = false
+lto = true
+overflow-checks = false
+panic = "abort"
+# strip = "symbols" 
+debug = true
+split-debuginfo = "packed"
+# rustflags = ["-Zno-jump-tables", "-Ctarget-feature=+avx"]
+rustflags = ["-Ctarget-feature=+avx2"]
+# strip = false 
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.dev]
+debug = true
+opt-level = 1
+panic = "abort"
+#debug-assertions = false
+#overflow-checks = false
+# rustflags = ["-Zno-jump-tables", "-Ctarget-feature=+avx"]
+rustflags = ["-Ctarget-feature=+avx2"]
+
+[profile.release.package."*"]
+opt-level = 3
+
+[profile.dev.package."*"]
+opt-level = 3

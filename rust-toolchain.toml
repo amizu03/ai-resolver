@@ -1,0 +1,6 @@
+[toolchain]
+channel = "nightly"
+components = ["rustfmt", "rustc-dev"]
+targets = ["i686-pc-windows-msvc"]
+profile = "minimal"
+
